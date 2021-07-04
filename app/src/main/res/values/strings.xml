@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Elite Timer</string>
+    <string name="u_create_an_account_u"><u>CREATE AN ACCOUNT</u></string>
+    <string name="enjoy_without_account"><u>Enjoy without any Account</u></string>
+</resources>
