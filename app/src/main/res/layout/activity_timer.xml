@@ -85,6 +85,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:id="@+id/proBtn"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
@@ -101,6 +102,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/lockBtn"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -116,6 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:id="@+id/programBtn"
             android:orientation="vertical">
 
             <ImageView
@@ -133,6 +136,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/durationBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -225,11 +229,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:id="@+id/dropdownBtn"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/dropdownImageView"
                 android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
         </LinearLayout>
