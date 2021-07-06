@@ -6,19 +6,19 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static android.view.LayoutInflater.from;
+import static android.view.View.VISIBLE;
 
 public class TimerActivity extends AppCompatActivity {
     private static final String TAG = "TimerActivity";
@@ -47,6 +48,7 @@ public class TimerActivity extends AppCompatActivity {
 
     private ArrayList<String> goTimeStampsList = new ArrayList<>();
     private ArrayList<String> restTimeStampsList = new ArrayList<>();
+    private ArrayList<String> totalTimeStampsList = new ArrayList<>();
 
     private RecyclerView conversationRecyclerView;
     private RecyclerViewAdapterMessages adapter;
@@ -117,13 +119,13 @@ public class TimerActivity extends AppCompatActivity {
                             resetBtn.setEnabled(false);
                         } else {
 
-                            proBtn.setVisibility(View.VISIBLE);
-                            lockBtn.setVisibility(View.VISIBLE);
-                            programBtn.setVisibility(View.VISIBLE);
-                            durationBtn.setVisibility(View.VISIBLE);
-                            pauseBtn.setVisibility(View.VISIBLE);
-                            finishBtn.setVisibility(View.VISIBLE);
-                            resetBtn.setVisibility(View.VISIBLE);
+                            proBtn.setVisibility(VISIBLE);
+                            lockBtn.setVisibility(VISIBLE);
+                            programBtn.setVisibility(VISIBLE);
+                            durationBtn.setVisibility(VISIBLE);
+                            pauseBtn.setVisibility(VISIBLE);
+                            finishBtn.setVisibility(VISIBLE);
+                            resetBtn.setVisibility(VISIBLE);
 
                             proBtn.setEnabled(true);
                             lockBtn.setEnabled(true);
@@ -186,6 +188,13 @@ public class TimerActivity extends AppCompatActivity {
             }
         });
 
+        durationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDurationDialog();
+            }
+        });
+
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -214,7 +223,7 @@ public class TimerActivity extends AppCompatActivity {
                     return;
                 }
 
-                String currentTimeString = stopWatch.toString();
+                String currentTimeString = stopWatch.toStringShort();
 
                 if (place == 1) {
                     // GO TIME
@@ -222,8 +231,6 @@ public class TimerActivity extends AppCompatActivity {
                 } else {
                     // REST TIME
                     restTimeStampsList.add(currentTimeString);
-
-                    initRecyclerView();
                 }
                 stopWatch.restart();
             }
@@ -235,6 +242,119 @@ public class TimerActivity extends AppCompatActivity {
                 textViewTimer.setText(time);
             }
         });
+
+    }
+
+    private void showDurationDialog() {
+        Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_duration);
+        dialog.setCancelable(true);
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        initRecyclerView(dialog);
+
+        totalTimeStampsList.clear();
+        for (int position = 0; position <= restTimeStampsList.size() - 1; position++) {
+
+            String finalValue = addTime(goTimeStampsList.get(position), restTimeStampsList.get(position));
+
+            totalTimeStampsList.add(finalValue);
+        }
+
+        String previous = null;
+
+        for (String timeStamps : totalTimeStampsList) {
+
+            if (previous == null) {
+                previous = timeStamps;
+            } else {
+                previous = addTime(previous, timeStamps);
+
+            }
+
+        }
+
+        TextView size_of_activities = dialog.findViewById(R.id.size_of_activities);
+        TextView size_of_duration = dialog.findViewById(R.id.size_of_duration);
+
+        TextView totalSize_of_activities = dialog.findViewById(R.id.total_size_of_activities);
+        TextView total_size_of_go = dialog.findViewById(R.id.total_size_of_go);
+        TextView total_size_of_rest = dialog.findViewById(R.id.total_size_of_rest);
+        TextView totalsizoftotal = dialog.findViewById(R.id.total_size_of_totals);
+
+        LinearLayout summaryLayout = dialog.findViewById(R.id.summary_option_dialogLayout);
+        LinearLayout detailsLayout = dialog.findViewById(R.id.details_option_dialogLayout);
+
+        size_of_activities.setText("        " + totalTimeStampsList.size() + "        ");
+        totalSize_of_activities.setText(totalTimeStampsList.size() + "");
+        size_of_duration.setText(previous);
+        totalsizoftotal.setText(previous);
+
+        previous = null;
+
+        for (String timeStamps : goTimeStampsList) {
+
+            if (previous == null) {
+                previous = timeStamps;
+            } else {
+                previous = addTime(previous, timeStamps);
+
+            }
+
+        }
+
+        total_size_of_go.setText(previous);
+
+        previous = null;
+
+        for (String timeStamps : restTimeStampsList) {
+
+            if (previous == null) {
+                previous = timeStamps;
+            } else {
+                previous = addTime(previous, timeStamps);
+
+            }
+
+        }
+
+        total_size_of_rest.setText(previous);
+
+        TextView detailOption = dialog.findViewById(R.id.details_option_dialog);
+        TextView summaryOption = dialog.findViewById(R.id.summary_option_dialog);
+
+        detailOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // CODE HERE
+                detailsLayout.setVisibility(VISIBLE);
+                summaryLayout.setVisibility(View.GONE);
+
+                detailOption.setTextColor(getResources().getColor(R.color.darkBlue));
+                summaryOption.setTextColor(getResources().getColor(R.color.skyBlue));
+
+            }
+        });
+
+        summaryOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // CODE HERE
+
+                detailsLayout.setVisibility(View.GONE);
+                summaryLayout.setVisibility(VISIBLE);
+
+                summaryOption.setTextColor(getResources().getColor(R.color.darkBlue));
+                detailOption.setTextColor(getResources().getColor(R.color.skyBlue));
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setAttributes(layoutParams);
 
     }
 
@@ -264,7 +384,8 @@ public class TimerActivity extends AppCompatActivity {
     }
 
     private String addTime(String firstTimeStamp, String secondTimeStamp1) {
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("mm:ss");
+//        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
         Date d = null;
         String newTime = "null";
 
@@ -275,9 +396,12 @@ public class TimerActivity extends AppCompatActivity {
 
             Calendar cal = Calendar.getInstance();
             cal.setTime(d);
-            cal.add(Calendar.SECOND, Integer.parseInt(secondTimeStamps[2]));
-            cal.add(Calendar.MINUTE, Integer.parseInt(secondTimeStamps[1]));
-            cal.add(Calendar.HOUR, Integer.parseInt(secondTimeStamps[0]));
+            cal.add(Calendar.SECOND, Integer.parseInt(secondTimeStamps[1]));
+            cal.add(Calendar.MINUTE, Integer.parseInt(secondTimeStamps[0]));
+
+//            cal.add(Calendar.SECOND, Integer.parseInt(secondTimeStamps[2]));
+//            cal.add(Calendar.MINUTE, Integer.parseInt(secondTimeStamps[1]));
+//            cal.add(Calendar.HOUR, Integer.parseInt(secondTimeStamps[0]));
 
             newTime = df.format(cal.getTime());
 
@@ -287,9 +411,9 @@ public class TimerActivity extends AppCompatActivity {
         return newTime;
     }
 
-    private void initRecyclerView() {
+    private void initRecyclerView(Dialog dialog) {
 
-        conversationRecyclerView = findViewById(R.id.testRecyclerView);
+        conversationRecyclerView = dialog.findViewById(R.id.testRecyclerView);
         adapter = new RecyclerViewAdapterMessages();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         //linearLayoutManager.setReverseLayout(true);
@@ -311,8 +435,6 @@ public class TimerActivity extends AppCompatActivity {
             return new ViewHolderRightMessage(view);
         }
 
-        ArrayList<String> total = new ArrayList<>();
-
         @Override
         public void onBindViewHolder(@NonNull final ViewHolderRightMessage holder, int position) {
 
@@ -326,13 +448,13 @@ public class TimerActivity extends AppCompatActivity {
 
                 String finalValue = addTime(goTimeStampsList.get(position), restTimeStampsList.get(position));
 
-                total.add(finalValue);
+                totalTimeStampsList.add(finalValue);
                 holder.total.setText(finalValue);
                 return;
             }
 
             if (!goTimeStampsList.isEmpty()) {
-                total.add(goTimeStampsList.get(position));
+                totalTimeStampsList.add(goTimeStampsList.get(position));
                 holder.total.setText(goTimeStampsList.get(position));
             }
 
