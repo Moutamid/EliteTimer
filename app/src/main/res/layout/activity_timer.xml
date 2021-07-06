@@ -52,11 +52,11 @@
         android:layout_below="@id/top_layout_bottom_activity">
 
         <TextView
+            android:id="@+id/timer_text_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="00:00"
-            android:id="@+id/timer_text_activity"
+            android:text="00:00:00"
             android:textColor="@color/darkBlue"
             android:textSize="65sp" />
 
@@ -72,7 +72,32 @@
         android:textColor="@color/white"
         android:textStyle="bold" />
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomLayout_timer_activity"
+        android:layout_below="@id/goBtnTimer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/testRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
     <LinearLayout
+        android:id="@+id/bottomLayout_timer_activity"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
@@ -83,9 +108,9 @@
         android:weightSum="8">
 
         <LinearLayout
+            android:id="@+id/proBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/proBtn"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
@@ -99,10 +124,10 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lockBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/lockBtn"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -114,11 +139,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/programBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:id="@+id/programBtn"
             android:orientation="vertical">
 
             <ImageView
@@ -158,10 +183,10 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/pauseBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/pauseBtn"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -181,10 +206,10 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/stopBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/stopBtn"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -203,11 +228,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/restartBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:id="@+id/restartBtn"
             android:orientation="vertical">
 
             <ImageView
@@ -225,17 +250,17 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/dropdownBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:id="@+id/dropdownBtn"
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/dropdownImageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/dropdownImageView"
                 android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
         </LinearLayout>

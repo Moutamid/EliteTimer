@@ -139,12 +139,12 @@ public class Stopwatch {
         return elapsed;
     }
 
-    public String toStringComplete() {
+    public String toString() {
         return padZero(getElapsedTimeHour()) + ":" + padZero(getElapsedTimeMin()) + ":"
                 + padZero(getElapsedTimeSecs());
     }
 
-    public String toString() {
+    public String toStringShort() {
         return padZero(getElapsedTimeMin()) + ":"
                 + padZero(getElapsedTimeSecs());
     }
